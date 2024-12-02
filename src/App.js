@@ -11,9 +11,30 @@ function App() {
     } = useForm({
     mode:"onSubmit",
   });
+
+  const sendDataToServer = async (data) => {
+    try {
+      const response = await fetch("http://localhost:4001/api/data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const responseData = await response.json();
+      console.log("Ответ от сервера:", responseData);
+    } catch (error) {
+      console.error("Ошибка при отправке данных:", error.message);
+    }
+  };
   
     const onSubmit = (data) => {
-      console.log(JSON.stringify(data));
+      sendDataToServer(data)
       reset({firstName:"Памʼятай",lastName:"Про Курсову Роботу"});
     };
     return (
